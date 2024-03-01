@@ -1,0 +1,36 @@
+function doGet(request) {
+  var url = "#####"; //เปลี่ยนเป็น URL SHEET ของเรา
+  var ss = SpreadsheetApp.openByUrl(url);
+  var sheetName = '#####'; //เปลี่ยนเป็นชื่อ SHEET เของรา
+
+
+  var c1 = request.parameter.col1;
+  var c2 = findColumnValue(ss, sheetName, c1, 2);
+  var c3 = findColumnValue(ss, sheetName, c1, 3);
+  var c4 = findColumnValue(ss, sheetName, c1, 4);
+  var c5 = findColumnValue(ss, sheetName, c1, 5);
+  var c6 = findColumnValue(ss, sheetName, c1, 6);
+
+  var result = {
+    col1: c1,
+    col2: c2,
+    col3: c3,
+    col4: c4,
+    col5: c5,
+    col6: c6,
+  };
+  console.log(result)
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}
+
+
+function findColumnValue(ss, sheetName, c1, colIndex) {
+  var sheet = ss.getSheetByName(sheetName);
+  var values = sheet.getRange(1, 1, sheet.getLastRow(), 1).getValues();
+  for (var i = 0; i < values.length; i++) {
+    if (values[i][0] == c1) {
+      return sheet.getRange(i + 1, colIndex).getValue();
+    }
+  }
+  return null; // Return null if value is not found
+}
